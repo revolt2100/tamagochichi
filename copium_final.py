@@ -15,18 +15,18 @@ os.chdir(os.path.dirname(__file__))
 
 def absent():
     start_time = time.time()
-    while time.time() - start_time < 10:
+    while time.time() - start_time < 5:
         global state
         state = 'ABSENT'
     state = 'RUNNING'
 
 def f_with_timer():
-    threadd = threading.Thread(target=absent)
-    threadd.start()
+   threadd = threading.Thread(target=absent)
+   threadd.start()
 
-def ending():
-    global state
-    state = 'END'
+#def ending():
+   # global state
+   # state = 'END'
 
 
 
@@ -118,9 +118,9 @@ bars = [
 feed_button = MyButton('feed.png', 25, 600, [food_bar.increasing])
 play_button = MyButton('play.png', 175, 605, [fun_bar.increasing])
 sleep_button = MyButton('sleep.png', 305, 605, [sleep_bar.increasing, f_with_timer])
-work_button = MyButton('work.png', 445, 605, None)
-settings_button = MyButton('settings.png', 20, 20, None)
-shop_button = MyButton('shop.png', 20, 92, None)
+work_button = MyButton('work.png', 445, 605)
+settings_button = MyButton('settings.png', 20, 20)
+shop_button = MyButton('shop.png', 20, 92)
 
 
 buttons = [
@@ -144,21 +144,18 @@ while running:
             if event.key == K_ESCAPE:
                 running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if state == 'ABSENT' or 'END':
-                if button.clicked():
+            for button in buttons:
+                if state == 'ABSENT':
                     continue
-            else:
-                for button in buttons:
+                else:
                     if button.clicked():
                         button.click()
+                        continue
     for bar in bars:
         bar.decreasing()
     
     screen.blit(background, (0, 0))
-    if state == 'RUNNING':
-        screen.blit(bunny, (screen_width / 2 - bunny_width / 2, screen_height / 2 - bunny_height / 2))
-    elif state == 'ABSENT':
-        
+    screen.blit(bunny, (screen_width / 2 - bunny_width / 2, screen_height / 2 - bunny_height / 2))
     screen.blit(full, (383, 23))
     screen.blit(eepy, (381, 52))
     screen.blit(fun, (375, 81))
