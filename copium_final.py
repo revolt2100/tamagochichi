@@ -13,15 +13,15 @@ from pygame.locals import (
 
 os.chdir(os.path.dirname(__file__))
 
-def absent():
+def absent(n):
     start_time = time.time()
-    while time.time() - start_time < 5:
+    while time.time() - start_time < n:
         global state
         state = 'ABSENT'
     state = 'RUNNING'
 
-def f_with_timer():
-   threadd = threading.Thread(target=absent)
+def f_with_timer(f = 2):
+   threadd = threading.Thread(target=lambda: absent(f))
    threadd.start()
 
 #def ending():
@@ -117,8 +117,8 @@ bars = [
 
 feed_button = MyButton('feed.png', 25, 600, [food_bar.increasing])
 play_button = MyButton('play.png', 175, 605, [fun_bar.increasing])
-sleep_button = MyButton('sleep.png', 305, 605, [sleep_bar.increasing, f_with_timer])
-work_button = MyButton('work.png', 445, 605)
+sleep_button = MyButton('sleep.png', 305, 605, [sleep_bar.increasing, lambda: f_with_timer(10)])
+work_button = MyButton('work.png', 445, 605, [lambda: f_with_timer(5)])
 settings_button = MyButton('settings.png', 20, 20)
 shop_button = MyButton('shop.png', 20, 92)
 
