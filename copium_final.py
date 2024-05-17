@@ -82,36 +82,36 @@ class MyBar:
 
 pygame.init()
 
-pygame.display.set_caption('tamagochi~chi')
-icon = pygame.image.load('icon.png')
+pygame.display.set_caption('assets/tamagochi~chi')
+icon = pygame.image.load('assets/icon.png')
 pygame.display.set_icon(icon)
 
 screen_width = 600
 screen_height = 700
 screen = pygame.display.set_mode((screen_width, screen_height))
-image_background = 'background.jpg'
+image_background = 'assets/background.jpg'
 
 pygame.mixer.init()
-music = pygame.mixer.music.load('waaaa_povle.ogg')
+music = pygame.mixer.music.load('assets/waaaa_povle.ogg')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(loops = -1)
 
 background = pygame.image.load(image_background)
-pile_of_books = pygame.image.load('pile_of_books.png').convert_alpha()
-very_normal_mushroom = pygame.image.load('very_normal_mushroom.png').convert_alpha()
-communication_device = pygame.image.load('communication_device.png').convert_alpha()
+pile_of_books = pygame.image.load('assets/pile_of_books.png').convert_alpha()
+very_normal_mushroom = pygame.image.load('assets/very_normal_mushroom.png').convert_alpha()
+communication_device = pygame.image.load('assets/communication_device.png').convert_alpha()
 
-eepy = pygame.image.load('eepy.png').convert_alpha()
-full = pygame.image.load('full.png').convert_alpha()
-fun = pygame.image.load('fun.png').convert_alpha()
-bunny = pygame.image.load('bunny.png').convert_alpha()
-bunny_eeping = pygame.image.load('bunny_eeping.png').convert_alpha()
-bunny_working = pygame.image.load('bunny_working.png').convert_alpha()
+eepy = pygame.image.load('assets/eepy.png').convert_alpha()
+full = pygame.image.load('assets/full.png').convert_alpha()
+fun = pygame.image.load('assets/fun.png').convert_alpha()
+bunny = pygame.image.load('assets/bunny.png').convert_alpha()
+bunny_eeping = pygame.image.load('assets/bunny_eeping.png').convert_alpha()
+bunny_working = pygame.image.load('assets/bunny_working.png').convert_alpha()
 
 bunny_width = bunny.get_width()
 bunny_height = bunny.get_height()
 
-item_shadow = pygame.image.load('item_shadow.png').convert_alpha()
+item_shadow = pygame.image.load('assets/item_shadow.png').convert_alpha()
 
 white = (255, 255, 255)
 clock = pygame.time.Clock()
@@ -135,11 +135,11 @@ bars = [
     fun_bar
 ]
 
-feed_button = MyButton('feed.png', 25, 600, [food_bar.increasing])
-play_button = MyButton('play.png', 175, 605, [fun_bar.increasing])
-sleep_button = MyButton('sleep.png', 305, 605, [sleep_bar.increasing, lambda: f_with_timer('ABSENT_s', 10)])
-work_button = MyButton('work.png', 445, 605, [lambda: f_with_timer('ABSENT_w', 5, [work_done])])
-settings_button = MyButton('settings.png', 20, 20)
+feed_button = MyButton('assets/feed.png', 25, 600, [food_bar.increasing])
+play_button = MyButton('assets/play.png', 175, 605, [fun_bar.increasing])
+sleep_button = MyButton('assets/sleep.png', 305, 605, [sleep_bar.increasing, lambda: f_with_timer('ABSENT_s', 10)])
+work_button = MyButton('assets/work.png', 445, 605, [lambda: f_with_timer('ABSENT_w', 5, [work_done])])
+settings_button = MyButton('assets/settings.png', 20, 20)
 #shop_button = MyButton('shop.png', 20, 92)
 
 
