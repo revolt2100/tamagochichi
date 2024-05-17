@@ -91,7 +91,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 image_background = 'background.jpg'
 
 pygame.mixer.init()
-music = pygame.mixer.music.load('music.ogg')
+music = pygame.mixer.music.load('waaa_povle.ogg')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(loops = -1)
 background = pygame.image.load(image_background)
