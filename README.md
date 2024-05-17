@@ -11,6 +11,7 @@
 
 - https://stackoverflow.com/
 - https://www.pygame.org/
+- https://pypi.org/project/pygame-widgets/
 
 Выполнили:
 - Катерина Бородина
