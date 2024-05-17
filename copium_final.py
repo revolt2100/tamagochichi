@@ -3,6 +3,7 @@ import pygame_widgets as pw
 import os
 import time
 import threading
+import random
 
 from pygame.locals import (
     K_ESCAPE,
@@ -13,15 +14,16 @@ from pygame.locals import (
 
 os.chdir(os.path.dirname(__file__))
 
-def absent(n):
+def absent(n, callbacks = []):
     start_time = time.time()
     while time.time() - start_time < n:
         global state
         state = 'ABSENT'
     state = 'RUNNING'
+    for c in callbacks: c()
 
-def f_with_timer(f = 2):
-   threadd = threading.Thread(target=lambda: absent(f))
+def f_with_timer(f = 2, callbacks = []):
+   threadd = threading.Thread(target=lambda: absent(f, callbacks))
    threadd.start()
 
 #def ending():
@@ -91,19 +93,31 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 image_background = 'background.jpg'
 
 pygame.mixer.init()
-music = pygame.mixer.music.load('waaa_povle.ogg')
+music = pygame.mixer.music.load('waaaa_povle.ogg')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(loops = -1)
 background = pygame.image.load(image_background)
-eepy = pygame.image.load('eepy.png')
-full = pygame.image.load('full.png')
-fun = pygame.image.load('fun.png')
+pile_of_books = pygame.image.load('pile_of_books.png').convert_alpha()
+very_normal_mushroom = pygame.image.load('very_normal_mushroom.png').convert_alpha()
+communication_device = pygame.image.load('communication_device.png').convert_alpha()
+eepy = pygame.image.load('eepy.png').convert_alpha()
+full = pygame.image.load('full.png').convert_alpha()
+fun = pygame.image.load('fun.png').convert_alpha()
 bunny = pygame.image.load('bunny.png').convert_alpha()
 bunny_width = bunny.get_width()
 bunny_height = bunny.get_height()
 
 white = (255, 255, 255)
 clock = pygame.time.Clock()
+
+def work_done():
+    #global money_count
+    global state_of_items
+    #money_count += random.randint(1, 12)
+    item = random.choice([False, pile_of_books, very_normal_mushroom, communication_device])
+    if item:
+        state_of_items = item 
+ 
 
 food_bar = MyBar(414, 23, 0.005555, 2, (90, 169, 83))
 sleep_bar = MyBar(414, 52, 0.003555, 3, (88, 187, 190))
@@ -118,7 +132,7 @@ bars = [
 feed_button = MyButton('feed.png', 25, 600, [food_bar.increasing])
 play_button = MyButton('play.png', 175, 605, [fun_bar.increasing])
 sleep_button = MyButton('sleep.png', 305, 605, [sleep_bar.increasing, lambda: f_with_timer(10)])
-work_button = MyButton('work.png', 445, 605, [lambda: f_with_timer(5)])
+work_button = MyButton('work.png', 445, 605, [lambda: f_with_timer(5, [work_done])])
 settings_button = MyButton('settings.png', 20, 20)
 shop_button = MyButton('shop.png', 20, 92)
 
@@ -134,8 +148,9 @@ buttons = [
 
 state = 'RUNNING'
 running = True
+state_of_items = None
 while running:
-    print(state)
+    print(state_of_items)
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
@@ -155,10 +170,13 @@ while running:
         bar.decreasing()
     
     screen.blit(background, (0, 0))
-    screen.blit(bunny, (screen_width / 2 - bunny_width / 2, screen_height / 2 - bunny_height / 2))
+    if state == 'RUNNING':
+        screen.blit(bunny, (screen_width / 2 - bunny_width / 2, screen_height / 2 - bunny_height / 2))
     screen.blit(full, (383, 23))
     screen.blit(eepy, (381, 52))
     screen.blit(fun, (375, 81))
+    if state_of_items != None:
+        screen.blit(state_of_items, (0, 0))
     pw.update(events)
     for button in buttons:
         screen.blit(button.image, (button.x, button.y))
