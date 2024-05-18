@@ -82,7 +82,7 @@ class MyBar:
 
 pygame.init()
 
-pygame.display.set_caption('assets/tamagochi~chi')
+pygame.display.set_caption('tamagochi~chi')
 icon = pygame.image.load('assets/icon.png')
 pygame.display.set_icon(icon)
 
