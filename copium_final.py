@@ -39,7 +39,7 @@ def save_game_state():
     }
     with open('game_state.pkl', 'wb') as file:
         pickle.dump(game_state, file)
-
+#+сохранение предмета на экране
 state_of_items_path = None
 
 selected_image_path = None
