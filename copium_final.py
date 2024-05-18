@@ -222,9 +222,9 @@ def work_done():
 
 game_state = load_game_state()
 
-food_bar = MyBar(414, 23, 0.35555, 2, (90, 169, 83))
-sleep_bar = MyBar(414, 52, 0.53555, 3, (88, 187, 190))
-fun_bar = MyBar(414, 81, 0.37555, 1, (228, 197, 112))
+food_bar = MyBar(414, 23, 0.007555, 2, (90, 169, 83))
+sleep_bar = MyBar(414, 52, 0.005555, 3, (88, 187, 190))
+fun_bar = MyBar(414, 81, 0.009555, 1, (228, 197, 112))
 
 
 if game_state:
