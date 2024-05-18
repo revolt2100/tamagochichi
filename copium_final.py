@@ -264,7 +264,7 @@ state_of_items = None
 
 show_background = True
 while running:
-    print(state)
+    #print(state)
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
