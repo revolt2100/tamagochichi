@@ -15,40 +15,21 @@ from pygame.locals import (
 
 os.chdir(os.path.dirname(__file__))
 
-def load_game_state():
-    if os.path.exists('game_state.pkl') and os.path.getsize('game_state.pkl') > 0:
-        with open('game_state.pkl', 'rb') as file:
-            return pickle.load(file)
-    else:
-        initial_game_state = {
-            'food_bar': 100,
-            'sleep_bar': 100,
-            'fun_bar': 100,
-            'state_of_items': None
-        }
-        with open('game_state.pkl', 'wb') as file:
-            pickle.dump(initial_game_state, file)
-        return initial_game_state
 
 def save_game_state():
+    global state
     game_state = {
         'food_bar': food_bar.current_bar,
         'sleep_bar': sleep_bar.current_bar,
         'fun_bar': fun_bar.current_bar,
         'state_of_items': state_of_items_path
     }
+    if state.startswith('ENDING'):
+        game_reset()
     with open('game_state.pkl', 'wb') as file:
         pickle.dump(game_state, file)
-#+сохранение предмета на экране
-state_of_items_path = None
 
-selected_image_path = None
-image_paths = ['assets/pile_of_books.png', 'assets/very_normal_mushroom.png', 'assets/communication_device.png']
-game_state = load_game_state()
-if not game_state:
-    selected_image_path = random.choice(image_paths)
-    state_of_items_path = selected_image_path
-    save_game_state()
+
 def load_game_state():
     if os.path.exists('game_state.pkl') and os.path.getsize('game_state.pkl') > 0:
         with open('game_state.pkl', 'rb') as file:
@@ -64,8 +45,6 @@ def load_game_state():
             pickle.dump(initial_game_state, file)
         return initial_game_state
 
-
-game_state = load_game_state()
 
 def absent(m, n, callbacks=[]):
     start_time = time.time()
@@ -73,12 +52,15 @@ def absent(m, n, callbacks=[]):
         global state
         state = m
     state = 'RUNNING'
-    for c in callbacks: c()
+    for c in callbacks:
+        c()
 
 
 def f_with_timer(m, n=2, callbacks=[]):
     threadd = threading.Thread(target=lambda: absent(m, n, callbacks))
     threadd.start()
+
+
 def darkening():
     darkening2 = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
     for alpha in range(0, 255, 5):
@@ -87,12 +69,20 @@ def darkening():
         screen.blit(darkening2, (0, 0))
         pygame.display.flip()
         pygame.time.delay(100)
+
+
 def first_ending():
+    global state
+    state = 'ENDING_BOGOS_BINTED'
     darkening()
     ending_image = pygame.image.load('assets/bogos_binted.png').convert_alpha()
-    screen.blit(ending_image,(0,0))
+    screen.blit(ending_image, (0, 0))
     pygame.display.flip()
+
+
 def second_ending():
+    global state
+    state = 'ENDING_SECOND_COMING'
     pygame.mixer.music.stop()
     music2 = 'assets/parousia_povle.ogg'
     pygame.mixer.music.load(music2)
@@ -104,7 +94,7 @@ def second_ending():
     pygame.display.flip()
 
 def game_reset():
-    global food_bar, sleep_bar, fun_bar, state_of_items_path, state_of_items, selected_image_path
+    global food_bar, sleep_bar, fun_bar, state_of_items_path, state_of_items, selected_image_path, game_state
     food_bar.current_bar = 100
     sleep_bar.current_bar = 100
     fun_bar.current_bar = 100
@@ -113,7 +103,21 @@ def game_reset():
     state_of_items_path = None
     state_of_items = None
     game_state = None
+
+
+state_of_items_path = None
+selected_image_path = None
+image_paths = ['assets/pile_of_books.png', 'assets/very_normal_mushroom.png', 'assets/communication_device.png']
+game_state = load_game_state()
+
+
+if not game_state:
+    selected_image_path = random.choice(image_paths)
+    state_of_items_path = selected_image_path
     save_game_state()
+
+
+game_state = load_game_state()
 
 
 class MyButton:
@@ -218,9 +222,9 @@ def work_done():
 
 game_state = load_game_state()
 
-food_bar = MyBar(414, 23, 3, 2, (90, 169, 83))
-sleep_bar = MyBar(414, 52, 3, 3, (88, 187, 190))
-fun_bar = MyBar(414, 81, 0.000001, 1, (228, 197, 112))
+food_bar = MyBar(414, 23, 0.35555, 2, (90, 169, 83))
+sleep_bar = MyBar(414, 52, 0.53555, 3, (88, 187, 190))
+fun_bar = MyBar(414, 81, 0.37555, 1, (228, 197, 112))
 
 
 if game_state:
@@ -241,7 +245,7 @@ feed_button = MyButton('assets/feed.png', 25, 600, [food_bar.increasing])
 play_button = MyButton('assets/play.png', 175, 605, [fun_bar.increasing])
 sleep_button = MyButton('assets/sleep.png', 305, 605, [sleep_bar.increasing, lambda: f_with_timer('ABSENT_s', 10)])
 work_button = MyButton('assets/work.png', 445, 605, [lambda: f_with_timer('ABSENT_w', 5, [work_done])])
-settings_button = MyButton('assets/settings.png', 20, 20)
+#settings_button = MyButton('assets/settings.png', 20, 20)
 #shop_button = MyButton('shop.png', 20, 92)
 
 
@@ -250,7 +254,7 @@ buttons = [
     play_button,
     sleep_button,
     work_button,
-    settings_button,
+    #settings_button,
     #shop_button
 ]
 
@@ -279,19 +283,17 @@ while running:
                         button.click()
                         continue
 
+    if state.startswith('ENDING'):
+        continue
+
     if state_of_items == communication_device and (food_bar.current_bar == 0 or fun_bar.current_bar == 0 or sleep_bar.current_bar == 0):
         first_ending()
         show_background = False
-        pygame.time.delay(10000)
-        running = False
-        game_reset()
         continue
+
     if food_bar.current_bar == 0 and fun_bar.current_bar == 0 and sleep_bar.current_bar == 0:
         second_ending()
         show_background = False
-        pygame.time.delay(10000)
-        running = False
-        game_reset()
         continue
 
     for bar in bars:
@@ -299,6 +301,7 @@ while running:
 
     if show_background:
         screen.blit(background, (0, 0))
+
     if state == 'RUNNING':
         screen.blit(bunny, (screen_width / 2 - bunny_width / 2, screen_height / 2 - bunny_height / 2))
     elif state == 'ABSENT_s':
@@ -307,6 +310,7 @@ while running:
     elif state == 'ABSENT_w':
         screen.blit(bunny_working, (
         screen_width / 2 - bunny_working.get_width() / 2, screen_height / 2 - bunny_working.get_height() / 2 + 110))
+
     screen.blit(full, (383, 23))
     screen.blit(eepy, (381, 52))
     screen.blit(fun, (375, 81))
