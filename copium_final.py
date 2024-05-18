@@ -104,6 +104,11 @@ def game_reset():
     state_of_items = None
     game_state = None
 
+def game_quit():
+    save_game_state()
+    global running
+    running = False
+
 
 state_of_items_path = None
 selected_image_path = None
@@ -245,6 +250,7 @@ feed_button = MyButton('assets/feed.png', 25, 600, [food_bar.increasing])
 play_button = MyButton('assets/play.png', 175, 605, [fun_bar.increasing])
 sleep_button = MyButton('assets/sleep.png', 305, 605, [sleep_bar.increasing, lambda: f_with_timer('ABSENT_s', 10)])
 work_button = MyButton('assets/work.png', 445, 605, [lambda: f_with_timer('ABSENT_w', 5, [work_done])])
+quit_button = MyButton('assets/back.png', 20, 20, [game_quit])
 #settings_button = MyButton('assets/settings.png', 20, 20)
 #shop_button = MyButton('shop.png', 20, 92)
 
@@ -254,6 +260,7 @@ buttons = [
     play_button,
     sleep_button,
     work_button,
+    quit_button
     #settings_button,
     #shop_button
 ]
@@ -310,7 +317,7 @@ while running:
     elif state == 'ABSENT_w':
         screen.blit(bunny_working, (
         screen_width / 2 - bunny_working.get_width() / 2, screen_height / 2 - bunny_working.get_height() / 2 + 110))
-
+    
     screen.blit(full, (383, 23))
     screen.blit(eepy, (381, 52))
     screen.blit(fun, (375, 81))
