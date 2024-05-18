@@ -22,4 +22,6 @@
 3. Перейдите по адресу содержимого папки tamagochichi (.../tamagochichi)
 4. Напишите python3 copium_final.py
 
+Вы можете посмотреть бета-версию магазина, написав python3 beta_shop.py
+
   
