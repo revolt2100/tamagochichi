@@ -18,14 +18,14 @@ os.chdir(os.path.dirname(__file__))
 
 def save_game_state():
     global state
+    if state.startswith('ENDING'):
+        game_reset()
     game_state = {
         'food_bar': food_bar.current_bar,
         'sleep_bar': sleep_bar.current_bar,
         'fun_bar': fun_bar.current_bar,
         'state_of_items': state_of_items_path
     }
-    if state.startswith('ENDING'):
-        game_reset()
     with open('game_state.pkl', 'wb') as file:
         pickle.dump(game_state, file)
 
@@ -227,9 +227,9 @@ def work_done():
 
 game_state = load_game_state()
 
-food_bar = MyBar(414, 23, 0.007555, 2, (90, 169, 83))
-sleep_bar = MyBar(414, 52, 0.005555, 3, (88, 187, 190))
-fun_bar = MyBar(414, 81, 0.009555, 1, (228, 197, 112))
+food_bar = MyBar(414, 23, 0.27555, 2, (90, 169, 83))
+sleep_bar = MyBar(414, 52, 0.25555, 3, (88, 187, 190))
+fun_bar = MyBar(414, 81, 0.29555, 1, (228, 197, 112))
 
 
 if game_state:
